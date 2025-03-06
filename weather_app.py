@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request
 import requests
+import os
 from flask_cors import CORS  # type: ignore
 
 app = Flask(__name__)
 CORS(app)
 
-key = "bedd24b87476b717c33c3cf7b73c0a71"
-
+key = os.getenv("WEATHER_API_KEY")
 
 @app.route('/weather', methods=['GET'])
 def get_weather():
