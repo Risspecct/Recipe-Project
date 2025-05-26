@@ -1,6 +1,6 @@
 # Recipe API
 
-This Flask-based API provides functionalities to search for recipes, retrieve recipe instructions, get nutritional information, find ingredient substitutes, convert ingredient quantities, and get random food trivia. The API interacts with the Spoonacular API for fetching data.
+This fastApi-based API provides functionalities to search for recipes, retrieve recipe instructions, get nutritional information, find ingredient substitutes, convert ingredient quantities, and get random food trivia. The API interacts with the Spoonacular API for fetching data.
 
 ## Features
 
