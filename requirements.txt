@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 flask
 flask_cors
 dotenv
 requests
+=======
+flask
+flask_cors
+dotenv
+requests
+>>>>>>> f1b0acb67374cc320259cccdffb387832d8c46f9
