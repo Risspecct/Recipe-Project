@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+m_venv/
+venv/
+ENV/
+env/
+
+# VSCode settings (optional)
+.vscode/
+
+# Environment variables
+.env
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# macOS and Linux system files
+.DS_Store
+Thumbs.db
