@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
-from typing import Optional
+from app.enums.cuisine import Cuisine
+from app.enums.diet import Diet
+from app.enums.intolerances import Intolerances
+from app.enums.sort import Sort
 from app.services.spoonacular import request_spoonacular
 
 router = APIRouter()
@@ -8,12 +11,12 @@ router = APIRouter()
 
 @router.get("/")
 def search(
-    query: Optional[str] = None,
-    ingredients: Optional[str] = None,
-    cuisine: Optional[str] = None,
-    diet: Optional[str] = None,
-    intolerances: Optional[str] = None,
-    sort: Optional[str] = None,
+    query: str = Query(default=None),
+    ingredients: str = Query(default=None),
+    cuisine: Cuisine = Query(default=None),
+    diet: Diet = Query(default=None),
+    intolerances: Intolerances = Query(default=None),
+    sort: Sort = Query(default=None),
     page: int = Query(1, gt=0),
     page_size: int = Query(5, gt=0)
 ):

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from app.services.spoonacular import request_spoonacular
 
@@ -7,6 +7,8 @@ router = APIRouter()
 
 @router.get("/{id}/nutritions")
 def get_nutrients(id: int):
+    if id < 1:
+        return HTTPException(status_code=400, detail="Invalid recipe id")
     response = request_spoonacular(f"/recipes/{id}/nutritionWidget.json")
     if response.status_code != 200:
         return JSONResponse(status_code=response.status_code, content={"error": "Could not fetch nutrition data"})

@@ -8,7 +8,7 @@ router = APIRouter()
 @router.get("/")
 def convert(
     ingredient: str = Query(..., alias="ingredientName"),
-    sourceAmount: float = Query(...),
+    sourceAmount: float = Query(..., ge=0),
     sourceUnit: str = Query("cups"),
     targetUnit: str = Query("grams")
 ):
