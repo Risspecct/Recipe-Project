@@ -1,154 +1,221 @@
 # Recipe API
 
-This fastApi-based API provides functionalities to search for recipes, retrieve recipe instructions, get nutritional information, find ingredient substitutes, convert ingredient quantities, and get random food trivia. The API interacts with the Spoonacular API for fetching data.
+This FastAPI-based application provides a range of food-related functionalities such as recipe search, cooking instructions, nutritional analysis, ingredient conversions, substitutes, and food trivia. It uses the [Spoonacular API](https://spoonacular.com/food-api) under the hood.
 
-## Features
-
-1. **Search Recipes**  
-   Search for recipes using various filters such as ingredients, cuisine, diet, intolerances, and sorting options.
-
-2. **Recipe Instructions**  
-   Retrieve step-by-step instructions for a specific recipe by its ID.
-
-3. **Nutritional Information**  
-   Fetch nutritional information such as calories, protein, fat, carbohydrates, etc., for a specific recipe by its ID.
-
-4. **Ingredient Substitutes**  
-   Get a list of substitutes for a specific ingredient.
-
-5. **Convert Ingredient Quantities**  
-   Convert ingredient quantities between different units (e.g., cups to grams).
-
-6. **Random Food Trivia**  
-   Fetch a random food-related trivia.
+> 🔪 **Note:** Weather-related files in this repository were used only for testing and are not part of the recipe API.
 
 ---
 
-## Endpoints
+## 🔧 Features
+
+* 🔍 Search recipes with filters (ingredients, cuisine, diet, etc.)
+* 📖 Get step-by-step instructions for a recipe
+* 🧮 Get detailed nutritional information
+* 🔄 Convert ingredient quantities between units
+* 🫒 Get ingredient substitutes
+* 🎲 Get random food trivia
+
+---
+
+## 🚀 Getting Started
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Create `.env` File
+
+Create a `.env` file in the root directory with your Spoonacular API key:
+
+```ini
+SPOONACULAR_API_KEY=your_api_key_here
+```
+
+Make sure to add `.env` to your `.gitignore` file.
+
+### Run the Server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### API Docs (Swagger UI)
+
+Once the server is running, visit:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+## 📂 Project Structure
+
+```
+└── risspecct-recipe-project/
+    ├── README.md
+    ├── requirements.txt
+    ├── weather.html                  # For testing only
+    ├── weather_app.py                # For testing only
+    └── app/
+        ├── main.py                   # FastAPI entry point
+        ├── api/
+        │   └── routes/
+        │       ├── __init__.py
+        │       ├── convert.py
+        │       ├── instructions.py
+        │       ├── nutrition.py
+        │       ├── search.py
+        │       ├── substitute.py
+        │       └── trivia.py
+        ├── enums/
+        │   ├── cuisine.py
+        │   ├── diet.py
+        │   ├── intolerances.py
+        │   └── sort.py
+        └── services/
+            └── spoonacular.py
+```
+
+---
+
+## 📘 API Endpoints & Examples
 
 ### 1. **Search Recipes**
-   **URL:** `/search`  
-   **Method:** `GET`  
-   **Description:** Search for recipes using various filters.  
-   **Query Parameters:**  
-   - `query`: (optional) Search query string.
-   - `ingredients`: (optional) Comma-separated list of ingredients.
-   - `cuisine`: (optional) Cuisine type (e.g., Italian, Chinese). You can check the available cuisines [here](https://spoonacular.com/food-api/docs#Cuisines) 
-   - `diet`: (optional) Diet type (e.g., vegetarian, keto). You can check available diets [here](https://spoonacular.com/food-api/docs#Diets)
-   - `intolerances`: (optional) Comma-separated list of intolerances (e.g., gluten, dairy). You can check available intolerances [here](https://spoonacular.com/food-api/docs#Intolerances)
-   - `sort`: (optional) Sort criteria (e.g., popularity, healthiness).
-   - `page`: (optional) Page number for pagination (default: 1).
-   - `page_size`: (optional) Number of results per page (default: 5).  
 
-   **Response Example:**
-   ```json
-   {
-       "recipes": [
-           {"id": 123, "name": "Pasta", "image": "image_url"},
-           {"id": 124, "name": "Pizza", "image": "image_url"}
-       ]
-   }
-   ```
+Search for recipes using keywords, ingredients, or filters like cuisine and diet.
+
+**GET** `/search`
+
+**Query Parameters:**
+
+* `query` (optional)
+* `ingredients` (optional)
+* `cuisine`, `diet`, `intolerances` (optional)
+* `sort` (optional)
+* `page`, `page_size` (optional, default = 1 and 5)
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/search?query=pasta&cuisine=italian&page=1"
+```
 
 ---
 
 ### 2. **Get Recipe Instructions**
-   **URL:** `/recipe/<int:id>/instructions`  
-   **Method:** `GET`  
-   **Description:** Fetch step-by-step instructions for a recipe.  
-   **Path Parameter:**  
-   - `id`: Recipe ID.  
 
-   **Response Example:**
-   ```json
-   {
-       "instructions": [
-           "1. Preheat the oven to 350°F.",
-           "2. Mix ingredients.",
-           "3. Bake for 25 minutes."
-       ]
-   }
-   ```
+Fetch detailed cooking instructions for a specific recipe.
+
+**GET** `/recipe/{id}/instructions`
+
+**Path Parameter:**
+
+* `id` — Recipe ID
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/recipe/715538/instructions"
+```
 
 ---
 
 ### 3. **Get Nutritional Information**
-   **URL:** `/recipe/<int:id>/nutritions`  
-   **Method:** `GET`  
-   **Description:** Get the nutritional details of a recipe.  
-   **Path Parameter:**  
-   - `id`: Recipe ID.  
 
-   **Response Example:**
-   ```json
-   {
-       "nutrition": [
-           {"Calories": "200kcal"},
-           {"Protein": "10g"}
-       ]
-   }
-   ```
+Retrieve nutritional breakdown (calories, protein, etc.) of a recipe.
+
+**GET** `/recipe/{id}/nutritions`
+
+**Path Parameter:**
+
+* `id` — Recipe ID
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/recipe/715538/nutritions"
+```
 
 ---
 
 ### 4. **Get Ingredient Substitutes**
-   **URL:** `/substitute`  
-   **Method:** `GET`  
-   **Description:** Fetch substitutes for a specific ingredient.  
-   **Query Parameter:**  
-   - `ingredientName`: Name of the ingredient.  
 
-   **Response Example:**
-   ```json
-   {
-       "message": "No substitutes found",
-       "substitutes": ["Greek Yogurt", "Coconut Cream"]
-   }
-   ```
+Get recommended alternatives for a given ingredient.
+
+**GET** `/substitute`
+
+**Query Parameter:**
+
+* `ingredientName` — Name of the ingredient
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/substitute?ingredientName=milk"
+```
 
 ---
 
 ### 5. **Convert Ingredient Quantities**
-   **URL:** `/convert`  
-   **Method:** `GET`  
-   **Description:** Convert ingredient quantities between units.  
-   **Query Parameters:**  
-   - `ingredientName`: Name of the ingredient.
-   - `sourceAmount`: Quantity to convert.
-   - `sourceUnit`: (optional) Original unit (default: cups).
-   - `targetUnit`: (optional) Target unit (default: grams).  
 
-   **Response Example:**
-   ```json
-   {
-       "converted": "200 grams"
-   }
-   ```
+Convert ingredient quantities between different measurement units.
 
----
+**GET** `/convert`
 
-### 6. **Random Food Trivia**
-   **URL:** `/trivia`  
-   **Method:** `GET`  
-   **Description:** Get a random food-related trivia.  
+**Query Parameters:**
 
-   **Response Example:**
-   ```json
-   {
-       "Trivia": "Apples float because they are 25% air."
-   }
-   ```
+* `ingredientName` (required)
+* `sourceAmount` (required)
+* `sourceUnit` (default: cups)
+* `targetUnit` (default: grams)
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/convert?ingredientName=flour&sourceAmount=2&sourceUnit=cups&targetUnit=grams"
+```
 
 ---
 
-## Error Handling
+### 6. **Get Random Food Trivia**
 
-- Returns appropriate HTTP status codes and error messages for invalid inputs or API failures.  
-- Example error response:  
-  ```json
-  {
-      "error": "Page and page_size must be positive integers"
-  }
-  ```
+Get a fun, random fact related to food.
+
+**GET** `/trivia`
+
+**Example:**
+
+```bash
+curl "http://localhost:8000/trivia"
+```
+
+---
+
+## 💠 Error Handling
+
+Returns standard HTTP error codes and JSON error messages.
+
+**Example:**
+
+```json
+{
+  "error": "Page and page_size must be positive integers"
+}
+```
+
+---
+
+## 📦 Dependencies
+
+```
+fastapi==0.115.2
+uvicorn==0.29.0
+requests==2.32.3
+python-dotenv==1.0.1
+pydantic==2.11.5
+```
 
 ---
